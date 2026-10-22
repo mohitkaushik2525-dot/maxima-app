@@ -26,9 +26,10 @@ nav button.on{color:var(--gold)}
 </style></head><body>
 <div id="splash"><div class="logo">MAXIMA</div><div class="pill">STAFF APP</div><div style="color:var(--muted);font-size:13px">Loading…</div></div>
 <div id="app">
-<iframe id="frame" allow="clipboard-write" referrerpolicy="no-referrer-when-downgrade"></iframe>
+<div id="frames" style="flex:1;position:relative;background:var(--bg)"></div>
 <nav><div class="in">
-<button data-p="" class="on"><svg viewBox="0 0 24 24"><path d="M4 4h16v6a8 8 0 0 1-16 0z"/><path d="M8 4V2M12 4V2M16 4V2M2 20h20"/></svg>Order</button>
+<button data-p="" class="on"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Home</button>
+<button data-p="order"><svg viewBox="0 0 24 24"><path d="M4 4h16v6a8 8 0 0 1-16 0z"/><path d="M8 4V2M12 4V2M16 4V2M2 20h20"/></svg>Order</button>
 <button data-p="fb"><svg viewBox="0 0 24 24"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.5 7L12 17.6 5.7 21l1.5-7L2 9.3l7-.8z"/></svg>Feedback</button>
 <button data-p="diwali"><span class="em">🪔</span>Diwali</button>
 <button data-p="manager"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Manager</button>
@@ -36,12 +37,18 @@ nav button.on{color:var(--gold)}
 </div>
 <script>
 const BASE='https://script.google.com/macros/s/AKfycbwYJ6ErkZAJgtX8V5ApYP7b_cVnx9Dy4p4Qgo1ZvFMGRy4KY7WY9NsIU8yi1uDTRRdlkQ/exec';
-const f=document.getElementById('frame'),nav=document.querySelector('nav');
-function go(p){f.src=BASE+'?app=1'+(p?'&p='+p:'');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));try{localStorage.setItem('mx_tab',p)}catch(e){}}
+const box=document.getElementById('frames'),nav=document.querySelector('nav'),F={};
+let ID=null;try{ID=JSON.parse(localStorage.getItem('mx_id')||'null')}catch(e){}
+const idq=()=>ID&&ID.me&&ID.tk?'&me='+encodeURIComponent(ID.me)+'&tk='+encodeURIComponent(ID.tk):'';
+function frame(p){if(F[p])return F[p];const f=document.createElement('iframe');f.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0;display:none;background:#0a0a0a';f.allow='clipboard-write';f.src=BASE+'?app=1'+(p?'&p='+p:'')+idq();f.addEventListener('load',()=>document.getElementById('splash').classList.add('hide'));box.appendChild(f);F[p]=f;return f;}
+window.addEventListener('message',e=>{const d=e.data;if(!d||d.maxima!==1||!d.me||!d.tk)return;if(ID&&ID.me===d.me&&ID.tk===d.tk)return;ID={me:d.me,tk:d.tk};try{localStorage.setItem('mx_id',JSON.stringify(ID))}catch(x){}
+Object.keys(F).forEach(p=>{if(F[p].style.display==='none'){F[p].src=BASE+'?app=1'+(p?'&p='+p:'')+idq();}});});
+function go(p){const f=frame(p);Object.values(F).forEach(x=>x.style.display='none');f.style.display='block';document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===p));try{localStorage.setItem('mx_tab',p)}catch(e){}}
 nav.onclick=e=>{const b=e.target.closest('button');if(b)go(b.dataset.p);};
 let start='';try{start=localStorage.getItem('mx_tab')||''}catch(e){}
+if(['','order','fb','diwali','manager'].indexOf(start)<0)start='';
 go(start);
-f.addEventListener('load',()=>document.getElementById('splash').classList.add('hide'));
+setTimeout(()=>{['','order','fb','diwali'].forEach(p=>frame(p));},4000);
 setTimeout(()=>document.getElementById('splash').classList.add('hide'),6000);
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script></body></html>

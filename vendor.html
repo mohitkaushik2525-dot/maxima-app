@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MAXIMA Vendor</title>
+<link rel="manifest" href="manifest-vendor.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MAXIMA Vendor">
+<style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:#0a0a0a;overflow:hidden}
+#frame{position:fixed;inset:0;width:100%;height:100%;border:0;background:#0a0a0a}
+#splash{position:fixed;inset:0;background:#0a0a0a;color:#f4f2ee;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:9;transition:opacity .4s;font-family:system-ui,sans-serif}
+#splash .logo{border:3px solid #fff;padding:10px 26px;font-size:30px;font-weight:300;letter-spacing:9px}
+#splash .pill{border:1.5px solid #d9b25a;color:#d9b25a;border-radius:999px;padding:5px 14px;font-size:11px;letter-spacing:3px}
+#splash.hide{opacity:0;pointer-events:none}
+</style></head><body>
+<div id="splash"><div class="logo">MAXIMA</div><div class="pill">VENDOR · MEAL COUNT</div><div style="color:#a8a49c;font-size:13px">Loading…</div></div>
+<iframe id="frame" src="https://script.google.com/macros/s/AKfycbwYJ6ErkZAJgtX8V5ApYP7b_cVnx9Dy4p4Qgo1ZvFMGRy4KY7WY9NsIU8yi1uDTRRdlkQ/exec?p=vendor&app=1" allow="clipboard-write"></iframe>
+<script>
+document.getElementById('frame').addEventListener('load',()=>document.getElementById('splash').classList.add('hide'));
+setTimeout(()=>document.getElementById('splash').classList.add('hide'),7000);
+</script></body></html>
